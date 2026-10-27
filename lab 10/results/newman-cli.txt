@@ -1,0 +1,324 @@
+newman
+
+ЛР 10 — HTTP і Postman (Крайняк М. Ю., 451)
+
+□ 01 — Основний сценарій
+└ 01 — Список завдань
+  GET http://127.0.0.1:8080/api.php?resource=tasks [200 OK, 545B, 41ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 2
+  √  Початкові записи id 1 і 2
+
+└ 02 — Фільтр виконаних (done=1)
+  GET http://127.0.0.1:8080/api.php?resource=tasks&done=1 [200 OK, 428B, 10ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 1
+  √  Лише done = true
+  √  Це завдання id 2
+
+└ 02a — Фільтр невиконаних (done=0)
+  GET http://127.0.0.1:8080/api.php?resource=tasks&done=0 [200 OK, 407B, 8ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 1
+  √  Лише done = false
+
+└ 02b — Один запис (id=1)
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id=1 [200 OK, 335B, 13ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — об’єкт id 1
+  √  Для одного запису немає meta
+
+└ 02c — id разом із done
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id=1&done=1 [400 Bad Request, 358B, 9ms]
+  √  Статус 400 Bad Request
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 03 — URL-encoded форма
+  POST http://127.0.0.1:8080/api.php?resource=echo [200 OK, 462B, 48ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  content_type — urlencoded
+  √  Поля тіла в $_POST
+  √  resource — з URL, а не з тіла
+  √  Файла немає
+
+└ 04 — Створити завдання
+  POST http://127.0.0.1:8080/api.php?resource=tasks [201 Created, 380B, 17ms]
+  √  Статус 201 Created
+  √  Відповідь JSON
+  √  Новий запис
+  √  Location веде на новий запис
+
+└ 05 — Прочитати створене
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id=3 [200 OK, 336B, 8ms]
+  √  Статус 200 OK
+  √  Той самий запис, що створив POST
+
+└ 06 — Оновити завдання (PUT)
+  PUT http://127.0.0.1:8080/api.php?resource=tasks&id=3 [200 OK, 334B, 21ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  id незмінний, нові title і done
+
+└ 06a — PUT без done
+  PUT http://127.0.0.1:8080/api.php?resource=tasks&id=3 [422 Unknown Status Code, 399B, 8ms]
+  √  Статус 422 Unprocessable Content
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 07 — Підтвердити збереження PUT
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id=3 [200 OK, 334B, 7ms]
+  √  Статус 200 OK
+  √  Збережено PUT, а не невдалий PUT без done
+
+└ 08 — Видалити завдання
+  DELETE http://127.0.0.1:8080/api.php?resource=tasks&id=3 [204 No Content, 229B, 10ms]
+  √  Статус 204 No Content
+  √  Тіло порожнє
+  √  Немає Content-Type JSON
+
+└ 09 — Перевірити відсутність
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id=3 [404 Not Found, 320B, 7ms]
+  √  Статус 404 Not Found
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 09a — Повторний DELETE
+  DELETE http://127.0.0.1:8080/api.php?resource=tasks&id=3 [404 Not Found, 320B, 10ms]
+  √  Статус 404 Not Found
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 10 — Список після циклу CRUD
+  GET http://127.0.0.1:8080/api.php?resource=tasks [200 OK, 545B, 6ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 2
+  √  Видаленого запису немає, інші залишилися
+
+□ 02 — Помилкові запити
+└ 11 — Порожній title
+  POST http://127.0.0.1:8080/api.php?resource=tasks [422 Unknown Status Code, 378B, 37ms]
+  √  Статус 422 Unprocessable Content
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 12 — Неправильні типи
+  POST http://127.0.0.1:8080/api.php?resource=tasks [422 Unknown Status Code, 378B, 7ms]
+  √  Статус 422 Unprocessable Content
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 12a — Рядок "false" замість false
+  POST http://127.0.0.1:8080/api.php?resource=tasks [422 Unknown Status Code, 399B, 10ms]
+  √  Статус 422 Unprocessable Content
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 12b — Поле id у тілі
+  POST http://127.0.0.1:8080/api.php?resource=tasks [422 Unknown Status Code, 376B, 9ms]
+  √  Статус 422 Unprocessable Content
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 13 — Пошкоджений JSON
+  POST http://127.0.0.1:8080/api.php?resource=tasks [400 Bad Request, 324B, 30ms]
+  √  Статус 400 Bad Request
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 14 — Невідповідний Content-Type
+  POST http://127.0.0.1:8080/api.php?resource=tasks [415 Unsupported Media Type, 374B, 6ms]
+  √  Статус 415 Unsupported Media Type
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 15 — Масив у query (id[])
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id[]=1 [400 Bad Request, 332B, 8ms]
+  √  Статус 400 Bad Request
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 16 — Невідомий запис
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id=999999999 [404 Not Found, 320B, 6ms]
+  √  Статус 404 Not Found
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 17 — Невідомий ресурс
+  GET http://127.0.0.1:8080/api.php?resource=unknown [404 Not Found, 316B, 7ms]
+  √  Статус 404 Not Found
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 18 — Непідтримуваний метод PATCH
+  PATCH http://127.0.0.1:8080/api.php?resource=tasks [405 Method Not Allowed, 397B, 8ms]
+  √  Статус 405 Method Not Allowed
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+  √  Allow перелічує підтримувані методи
+
+└ 19 — DELETE без id
+  DELETE http://127.0.0.1:8080/api.php?resource=tasks [400 Bad Request, 324B, 7ms]
+  √  Статус 400 Bad Request
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 20 — Невдалі POST не створили записів
+  GET http://127.0.0.1:8080/api.php?resource=tasks [200 OK, 545B, 12ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 2
+  √  Лише початкові id 1 і 2
+
+□ 03 — Basic Auth
+└ 21 — Без автентифікації
+  GET http://127.0.0.1:8080/api.php?resource=auth [401 Unauthorized, 406B, 7ms]
+  √  Статус 401 Unauthorized
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+  √  WWW-Authenticate: Basic
+
+└ 22 — Basic Auth (демонстраційні дані)
+  GET http://127.0.0.1:8080/api.php?resource=auth [200 OK, 308B, 10ms]
+  √  Статус 200 OK
+  √  authenticated = true
+  √  Cookie входу не створено
+
+└ 23 — Basic Auth з неправильним паролем
+  GET http://127.0.0.1:8080/api.php?resource=auth [401 Unauthorized, 406B, 6ms]
+  √  Статус 401 Unauthorized
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+□ 04 — Пошук q (власне доповнення)
+└ 24 — q великими літерами
+  GET http://127.0.0.1:8080/api.php?resource=tasks&q=ПЕРЕВІРИТИ [200 OK, 407B, 8ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 1
+  √  Знайдено «Перевірити GET» без урахування регістру
+
+└ 25 — q іншим регістром у середині слова
+  GET http://127.0.0.1:8080/api.php?resource=tasks&q=ТестОві [200 OK, 428B, 7ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 1
+  √  Знайдено id 2
+
+└ 26 — q без збігів
+  GET http://127.0.0.1:8080/api.php?resource=tasks&q=автобус [200 OK, 286B, 7ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 0
+  √  Порожній масив, не помилка
+
+└ 27 — q разом із done=0
+  GET http://127.0.0.1:8080/api.php?resource=tasks&q=и&done=0 [200 OK, 407B, 7ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 1
+  √  Обидва фільтри: лише невиконане id 1
+
+└ 27a — Той самий q без done
+  GET http://127.0.0.1:8080/api.php?resource=tasks&q=и [200 OK, 545B, 7ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 2
+
+└ 28 — Масив q[]
+  GET http://127.0.0.1:8080/api.php?resource=tasks&q[]=Перевірити [400 Bad Request, 331B, 7ms]
+  √  Статус 400 Bad Request
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 29 — q разом з id
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id=1&q=Перевірити [400 Bad Request, 355B, 7ms]
+  √  Статус 400 Bad Request
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 30 — q довший за 40 символів
+  GET http://127.0.0.1:8080/api.php?resource=tasks&q=ааааааааааааааааааааааааааааааааааааааааа [400 Bad Request, 363B, 21ms]
+  √  Статус 400 Bad Request
+  √  Відповідь JSON
+  √  error.message пояснює причину
+  √  Немає data
+
+└ 31 — q лише з пробілів = без пошуку
+  GET http://127.0.0.1:8080/api.php?resource=tasks&q=    [200 OK, 545B, 7ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 2
+
+└ 32 — q з пробілами по краях (trim)
+  GET http://127.0.0.1:8080/api.php?resource=tasks&q=  дані   [200 OK, 428B, 9ms]
+  √  Статус 200 OK
+  √  Відповідь JSON
+  √  data — масив, meta.count = довжина
+  √  Записів: 1
+  √  Знайдено id 2
+
+□ 05 — Ручне завантаження файла
+└ Вручну — Вкладення attachment
+  POST http://127.0.0.1:8080/api.php?resource=echo
+[200 OK, 528B, 119ms]
+  √  Статус 200 OK
+  √  multipart/form-data
+  √  Текстове поле name
+  √  Метадані файла
+
+┌─────────────────────────┬───────────────────┬──────────────────┐
+│                         │          executed │           failed │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              iterations │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│                requests │                41 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│            test-scripts │                41 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│      prerequest-scripts │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              assertions │               172 │                0 │
+├─────────────────────────┴───────────────────┴──────────────────┤
+│ total run duration: 4.1s                                       │
+├────────────────────────────────────────────────────────────────┤
+│ total data received: 6.17kB (approx)                           │
+├────────────────────────────────────────────────────────────────┤
+│ average response time: 14ms [min: 6ms, max: 119ms, s.d.: 19ms] │
+└────────────────────────────────────────────────────────────────┘

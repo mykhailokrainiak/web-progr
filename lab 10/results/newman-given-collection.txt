@@ -1,0 +1,109 @@
+newman
+
+ЛР 10 — HTTP і Postman
+
+□ 01 — Основний сценарій
+└ 01 — Список завдань
+  GET http://127.0.0.1:8080/api.php?resource=tasks [200 OK, 545B, 39ms]
+  √  Статус 200
+  √  JSON MIME
+  √  Два початкові записи
+
+└ 02 — Фільтр виконаних
+  GET http://127.0.0.1:8080/api.php?resource=tasks&done=1 [200 OK, 428B, 13ms]
+  √  Статус 200
+  √  JSON MIME
+  √  Лише виконані
+
+└ 03 — URL-encoded форма
+  POST http://127.0.0.1:8080/api.php?resource=echo [200 OK, 462B, 11ms]
+  √  Статус 200
+  √  JSON MIME
+  √  Поля форми
+
+└ 04 — Створити завдання
+  POST http://127.0.0.1:8080/api.php?resource=tasks [201 Created, 380B, 9ms]
+  √  Статус 201
+  √  JSON MIME
+  √  Новий запис
+
+└ 05 — Прочитати створене
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id=3 [200 OK, 336B, 12ms]
+  √  Статус 200
+  √  JSON MIME
+  √  Правильний id
+
+└ 06 — Оновити завдання
+  PUT http://127.0.0.1:8080/api.php?resource=tasks&id=3 [200 OK, 334B, 9ms]
+  √  Статус 200
+  √  JSON MIME
+  √  Зміни збережено
+
+└ 07 — Підтвердити збереження PUT
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id=3 [200 OK, 334B, 7ms]
+  √  Статус 200
+  √  PUT збережено
+
+└ 08 — Видалити завдання
+  DELETE http://127.0.0.1:8080/api.php?resource=tasks&id=3 [204 No Content, 229B, 9ms]
+  √  Статус 204
+  √  Порожнє тіло
+
+└ 09 — Перевірити відсутність
+  GET http://127.0.0.1:8080/api.php?resource=tasks&id=3 [404 Not Found, 320B, 9ms]
+  √  Статус 404
+  √  JSON MIME
+  √  Помилка має повідомлення
+
+└ 10 — Порожній заголовок
+  POST http://127.0.0.1:8080/api.php?resource=tasks [422 Unknown Status Code, 378B, 23ms]
+  √  Статус 422
+  √  JSON MIME
+
+└ 11 — Пошкоджений JSON
+  POST http://127.0.0.1:8080/api.php?resource=tasks [400 Bad Request, 324B, 10ms]
+  √  Статус 400
+  √  JSON MIME
+
+└ 12 — Невідповідний MIME
+  POST http://127.0.0.1:8080/api.php?resource=tasks [415 Unsupported Media Type, 374B, 7ms]
+  √  Статус 415
+  √  JSON MIME
+
+└ 13 — Непідтримуваний метод
+  PATCH http://127.0.0.1:8080/api.php?resource=tasks [405 Method Not Allowed, 397B, 10ms]
+  √  Статус 405
+  √  JSON MIME
+  √  Allow
+
+└ 14 — Без автентифікації
+  GET http://127.0.0.1:8080/api.php?resource=auth [401 Unauthorized, 406B, 7ms]
+  √  Статус 401
+  √  JSON MIME
+  √  WWW-Authenticate
+
+└ 15 — Basic Auth
+  GET http://127.0.0.1:8080/api.php?resource=auth [200 OK, 308B, 7ms]
+  √  Статус 200
+  √  JSON MIME
+  √  Автентифіковано
+
+┌─────────────────────────┬──────────────────┬─────────────────┐
+│                         │         executed │          failed │
+├─────────────────────────┼──────────────────┼─────────────────┤
+│              iterations │                1 │               0 │
+├─────────────────────────┼──────────────────┼─────────────────┤
+│                requests │               15 │               0 │
+├─────────────────────────┼──────────────────┼─────────────────┤
+│            test-scripts │               15 │               0 │
+├─────────────────────────┼──────────────────┼─────────────────┤
+│      prerequest-scripts │                1 │               0 │
+├─────────────────────────┼──────────────────┼─────────────────┤
+│              assertions │               40 │               0 │
+├─────────────────────────┴──────────────────┴─────────────────┤
+│ total run duration: 1352ms                                   │
+├──────────────────────────────────────────────────────────────┤
+│ total data received: 1.92kB (approx)                         │
+├──────────────────────────────────────────────────────────────┤
+│ average response time: 12ms [min: 7ms, max: 39ms, s.d.: 8ms] │
+└──────────────────────────────────────────────────────────────┘

@@ -1,0 +1,1977 @@
+{
+  "info": {
+    "name": "ЛР 10 — HTTP і Postman (Крайняк М. Ю., 451)",
+    "description": "Локальний API «Список завдань». Перед запуском: php reset.php у каталозі src, середовище Lab10 Local. Папки 01–04 запускаються Runner/Newman по черзі за одну ітерацію; папка 05 потребує вибору файла.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "item": [
+    {
+      "name": "01 — Основний сценарій",
+      "item": [
+        {
+          "name": "01 — Список завдань",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 2\", () => pm.expect(body.meta.count).to.equal(2));",
+                  "pm.test(\"Початкові записи id 1 і 2\", () => pm.expect(body.data.map(t => t.id)).to.eql([1, 2]));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "02 — Фільтр виконаних (done=1)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&done=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "done",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 1\", () => pm.expect(body.meta.count).to.equal(1));",
+                  "pm.test(\"Лише done = true\", () => body.data.forEach(t => pm.expect(t.done).to.equal(true)));",
+                  "pm.test(\"Це завдання id 2\", () => pm.expect(body.data[0].id).to.equal(2));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "02a — Фільтр невиконаних (done=0)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&done=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "done",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 1\", () => pm.expect(body.meta.count).to.equal(1));",
+                  "pm.test(\"Лише done = false\", () => body.data.forEach(t => pm.expect(t.done).to.equal(false)));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "02b — Один запис (id=1)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — об’єкт id 1\", () => { pm.expect(body.data).to.be.an(\"object\"); pm.expect(body.data.id).to.equal(1); pm.expect(body.data.title).to.equal(\"Перевірити GET\"); });",
+                  "pm.test(\"Для одного запису немає meta\", () => pm.expect(body).to.not.have.property(\"meta\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "02c — id разом із done",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id=1&done=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "1"
+                },
+                {
+                  "key": "done",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 400 Bad Request\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"done\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "03 — URL-encoded форма",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=echo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "echo"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Студент DEMO"
+                },
+                {
+                  "key": "group",
+                  "value": "DEMO"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const d = pm.response.json().data;",
+                  "pm.test(\"content_type — urlencoded\", () => pm.expect(d.content_type).to.equal(\"application/x-www-form-urlencoded\"));",
+                  "pm.test(\"Поля тіла в $_POST\", () => { pm.expect(d.fields.name).to.equal(\"Студент DEMO\"); pm.expect(d.fields.group).to.equal(\"DEMO\"); });",
+                  "pm.test(\"resource — з URL, а не з тіла\", () => pm.expect(d.fields).to.not.have.property(\"resource\"));",
+                  "pm.test(\"Файла немає\", () => pm.expect(d.file).to.equal(null));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "04 — Створити завдання",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Перевірити POST\", \"done\": false}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.unset(\"task_id\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 201 Created\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Новий запис\", () => { pm.expect(body.data.id).to.be.a(\"number\").above(0); pm.expect(body.data.title).to.equal(\"Перевірити POST\"); pm.expect(body.data.done).to.equal(false); });",
+                  "pm.test(\"Location веде на новий запис\", () => pm.expect(pm.response.headers.get(\"Location\")).to.equal(\"api.php?resource=tasks&id=\" + body.data.id));",
+                  "if (pm.response.code === 201 && Number.isInteger(body.data.id)) { pm.environment.set(\"task_id\", body.data.id); }"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "05 — Прочитати створене",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id={{task_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "{{task_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "const t = pm.response.json().data;",
+                  "pm.test(\"Той самий запис, що створив POST\", () => { pm.expect(t.id).to.equal(Number(pm.environment.get(\"task_id\"))); pm.expect(t.title).to.equal(\"Перевірити POST\"); pm.expect(t.done).to.equal(false); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "06 — Оновити завдання (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id={{task_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "{{task_id}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Перевірити PUT\", \"done\": true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const t = pm.response.json().data;",
+                  "pm.test(\"id незмінний, нові title і done\", () => { pm.expect(t.id).to.equal(Number(pm.environment.get(\"task_id\"))); pm.expect(t.title).to.equal(\"Перевірити PUT\"); pm.expect(t.done).to.equal(true); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "06a — PUT без done",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id={{task_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "{{task_id}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Без done\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 422 Unprocessable Content\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"done\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "07 — Підтвердити збереження PUT",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id={{task_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "{{task_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "const t = pm.response.json().data;",
+                  "pm.test(\"Збережено PUT, а не невдалий PUT без done\", () => { pm.expect(t.title).to.equal(\"Перевірити PUT\"); pm.expect(t.done).to.equal(true); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "08 — Видалити завдання",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id={{task_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "{{task_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 204 No Content\", () => pm.response.to.have.status(204));",
+                  "pm.test(\"Тіло порожнє\", () => pm.expect(pm.response.text()).to.equal(\"\"));",
+                  "pm.test(\"Немає Content-Type JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.not.include(\"application/json\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "09 — Перевірити відсутність",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id={{task_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "{{task_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 404 Not Found\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"не знайдено\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "09a — Повторний DELETE",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id={{task_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "{{task_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 404 Not Found\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"не знайдено\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "10 — Список після циклу CRUD",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 2\", () => pm.expect(body.meta.count).to.equal(2));",
+                  "pm.test(\"Видаленого запису немає, інші залишилися\", () => { const ids = body.data.map(t => t.id); pm.expect(ids).to.eql([1, 2]); pm.expect(ids).to.not.include(Number(pm.environment.get(\"task_id\"))); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 — Помилкові запити",
+      "item": [
+        {
+          "name": "11 — Порожній title",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"   \", \"done\": false}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 422 Unprocessable Content\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"title\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "12 — Неправильні типи",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": [], \"done\": \"false\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 422 Unprocessable Content\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"title\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "12a — Рядок \"false\" замість false",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Тест\", \"done\": \"false\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 422 Unprocessable Content\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"done\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "12b — Поле id у тілі",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\": 77, \"title\": \"Тест\", \"done\": false}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 422 Unprocessable Content\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"id генерує сервер\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "13 — Пошкоджений JSON",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Тест\",}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 400 Bad Request\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"JSON\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "14 — Невідповідний Content-Type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Тест\", \"done\": false}",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 415 Unsupported Media Type\", () => pm.response.to.have.status(415));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"application/json\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "15 — Масив у query (id[])",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id[]=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id[]",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 400 Bad Request\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"рядком\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "16 — Невідомий запис",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id=999999999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "999999999"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 404 Not Found\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"не знайдено\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "17 — Невідомий ресурс",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=unknown",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "unknown"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 404 Not Found\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"Ресурс\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "18 — Непідтримуваний метод PATCH",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 405 Method Not Allowed\", () => pm.response.to.have.status(405));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"Метод\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));",
+                  "pm.test(\"Allow перелічує підтримувані методи\", () => pm.expect(pm.response.headers.get(\"Allow\")).to.equal(\"GET, POST, PUT, DELETE\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "19 — DELETE без id",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 400 Bad Request\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"id\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "20 — Невдалі POST не створили записів",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 2\", () => pm.expect(body.meta.count).to.equal(2));",
+                  "pm.test(\"Лише початкові id 1 і 2\", () => pm.expect(body.data.map(t => t.id)).to.eql([1, 2]));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 — Basic Auth",
+      "item": [
+        {
+          "name": "21 — Без автентифікації",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=auth",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "auth"
+                }
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 401 Unauthorized\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"Basic Auth\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));",
+                  "pm.test(\"WWW-Authenticate: Basic\", () => pm.expect(pm.response.headers.get(\"WWW-Authenticate\")).to.include(\"Basic\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "22 — Basic Auth (демонстраційні дані)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=auth",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "auth"
+                }
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "student",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "demo-pass",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "const d = pm.response.json().data;",
+                  "pm.test(\"authenticated = true\", () => { pm.expect(d.authenticated).to.equal(true); pm.expect(d.user).to.equal(\"student\"); });",
+                  "pm.test(\"Cookie входу не створено\", () => pm.expect(pm.response.headers.has(\"Set-Cookie\")).to.equal(false));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "23 — Basic Auth з неправильним паролем",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=auth",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "auth"
+                }
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "student",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "wrong-pass",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 401 Unauthorized\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"Basic Auth\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 — Пошук q (власне доповнення)",
+      "item": [
+        {
+          "name": "24 — q великими літерами",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&q=ПЕРЕВІРИТИ",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "q",
+                  "value": "ПЕРЕВІРИТИ"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 1\", () => pm.expect(body.meta.count).to.equal(1));",
+                  "pm.test(\"Знайдено «Перевірити GET» без урахування регістру\", () => pm.expect(body.data[0].title).to.equal(\"Перевірити GET\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "25 — q іншим регістром у середині слова",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&q=ТестОві",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "q",
+                  "value": "ТестОві"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 1\", () => pm.expect(body.meta.count).to.equal(1));",
+                  "pm.test(\"Знайдено id 2\", () => pm.expect(body.data[0].id).to.equal(2));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "26 — q без збігів",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&q=автобус",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "q",
+                  "value": "автобус"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 0\", () => pm.expect(body.meta.count).to.equal(0));",
+                  "pm.test(\"Порожній масив, не помилка\", () => pm.expect(body.data).to.eql([]));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "27 — q разом із done=0",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&q=и&done=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "q",
+                  "value": "и"
+                },
+                {
+                  "key": "done",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 1\", () => pm.expect(body.meta.count).to.equal(1));",
+                  "pm.test(\"Обидва фільтри: лише невиконане id 1\", () => { pm.expect(body.data[0].id).to.equal(1); pm.expect(body.data[0].done).to.equal(false); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "27a — Той самий q без done",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&q=и",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "q",
+                  "value": "и"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 2\", () => pm.expect(body.meta.count).to.equal(2));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "28 — Масив q[]",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&q[]=Перевірити",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "q[]",
+                  "value": "Перевірити"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 400 Bad Request\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"Параметр q\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "29 — q разом з id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&id=1&q=Перевірити",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "id",
+                  "value": "1"
+                },
+                {
+                  "key": "q",
+                  "value": "Перевірити"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 400 Bad Request\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"фільтр q\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "30 — q довший за 40 символів",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&q=ааааааааааааааааааааааааааааааааааааааааа",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "q",
+                  "value": "ааааааааааааааааааааааааааааааааааааааааа"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 400 Bad Request\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"error.message пояснює причину\", () => { pm.expect(body.error.message).to.be.a(\"string\").and.include(\"40\"); });",
+                  "pm.test(\"Немає data\", () => pm.expect(body).to.not.have.property(\"data\"));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "31 — q лише з пробілів = без пошуку",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&q=   ",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "q",
+                  "value": "   "
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 2\", () => pm.expect(body.meta.count).to.equal(2));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "32 — q з пробілами по краях (trim)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=tasks&q=  дані  ",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "tasks"
+                },
+                {
+                  "key": "q",
+                  "value": "  дані  "
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Відповідь JSON\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"data — масив, meta.count = довжина\", () => { pm.expect(body.data).to.be.an(\"array\"); pm.expect(body.meta.count).to.equal(body.data.length); });",
+                  "pm.test(\"Записів: 1\", () => pm.expect(body.meta.count).to.equal(1));",
+                  "pm.test(\"Знайдено id 2\", () => pm.expect(body.data[0].id).to.equal(2));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 — Ручне завантаження файла",
+      "item": [
+        {
+          "name": "Вручну — Вкладення attachment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?resource=echo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "resource",
+                  "value": "echo"
+                }
+              ]
+            },
+            "description": "У Postman виберіть src/sample.txt у полі attachment (тип File). Newman бере файл із --working-dir src.",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Студент DEMO",
+                  "type": "text"
+                },
+                {
+                  "key": "attachment",
+                  "type": "file",
+                  "src": "sample.txt"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус 200 OK\", () => pm.response.to.have.status(200));",
+                  "const d = pm.response.json().data;",
+                  "pm.test(\"multipart/form-data\", () => pm.expect(d.content_type).to.equal(\"multipart/form-data\"));",
+                  "pm.test(\"Текстове поле name\", () => pm.expect(d.fields.name).to.equal(\"Студент DEMO\"));",
+                  "pm.test(\"Метадані файла\", () => { pm.expect(d.file.name).to.equal(\"sample.txt\"); pm.expect(d.file.size).to.equal(150); pm.expect(d.file.detected_mime).to.equal(\"text/plain\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    }
+  ]
+}
