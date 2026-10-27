@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+  <route>
+    <id>3f9a1c2b7d4e8a01</id>
+    <number>105</number>
+    <destination>Житомир</destination>
+    <departure>07:45</departure>
+    <platform>3</platform>
+    <price>180</price>
+  </route>
+  <route>
+    <id>a7c03e5d9b1f2468</id>
+    <number>212-А</number>
+    <destination>Біла Церква</destination>
+    <departure>09:10</departure>
+    <platform>5</platform>
+    <price>120</price>
+  </route>
+  <route>
+    <id>5e2d8f60c4a9b137</id>
+    <number>47</number>
+    <destination>Кам'янець-Подільський</destination>
+    <departure>14:30</departure>
+    <platform>8</platform>
+    <price>450</price>
+  </route>
+</routes>

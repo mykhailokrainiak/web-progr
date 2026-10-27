@@ -1,0 +1,26 @@
+[
+    {
+        "id": "3f9a1c2b7d4e8a01",
+        "number": "105",
+        "destination": "Житомир",
+        "departure": "07:45",
+        "platform": 3,
+        "price": 180
+    },
+    {
+        "id": "a7c03e5d9b1f2468",
+        "number": "212-А",
+        "destination": "Біла Церква",
+        "departure": "09:10",
+        "platform": 5,
+        "price": 120
+    },
+    {
+        "id": "5e2d8f60c4a9b137",
+        "number": "47",
+        "destination": "Кам'янець-Подільський",
+        "departure": "14:30",
+        "platform": 8,
+        "price": 450
+    }
+]
