@@ -1,0 +1,24 @@
+Крок 9. Експорт phpMyAdmin (export/lab11.sql) → імпорт phpMyAdmin у порожню базу lab11_restore → порівняння.
+Порівняння виконано обліковим записом адміністратора (клієнт mariadb), 27.10.2026.
+
+== Дані (однакові в обох базах)
+                 lab11                    lab11_restore
+products         3 рядки, SUM(price)=125.75     3 рядки, SUM(price)=125.75
+bus_routes       8 рядків, SUM(price)=2565.50   8 рядків, SUM(price)=2565.50
+CHECKSUM TABLE   products 1460988797            products 1460988797
+                 bus_routes 2794061950          bus_routes 2794061950
+Перевірка тексту: «Кам'янець-Подільський» 450.00 і «Набір ручок» 60.25 — однакові.
+
+== Ключі (information_schema.statistics) — однакові
+products: PRIMARY, uq_products_code
+bus_routes: PRIMARY, uq_bus_routes_number_time (route_number, departure_time), idx_bus_routes_destination
+
+== Розбіжність: CHECK-обмеження
+lab11: 2 (chk_bus_routes_platform, chk_bus_routes_price); lab11_restore після імпорту: 0.
+Причина: phpMyAdmin 5.2.3 записав для bus_routes «CREATE TABLE ... ( ... ) ;» без CHECK і без параметрів таблиці.
+ENGINE і кодування в lab11_restore все одно InnoDB / utf8mb4_unicode_ci (типові значення бази).
+Виправлення: виконано sql/routes-checks.sql у lab11_restore → CHECK-обмежень 2.
+Після цього SHOW CREATE TABLE обох таблиць (без лічильника AUTO_INCREMENT) у двох базах збігаються повністю.
+
+== Застосунок із DB_NAME=lab11_restore
+routes.php — 8 рейсів, index.php — 3 товари; таблиця рейсів на сторінці ідентична сторінці з lab11.

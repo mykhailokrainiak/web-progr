@@ -1,0 +1,30 @@
+-- Крок 2: запити у базі lab11
+
+> SELECT id, product_code, product_name, price FROM products ORDER BY id;
++----+--------------+-----------------------+-------+
+| id | product_code | product_name          | price |
++----+--------------+-----------------------+-------+
+|  1 | PD1001       | Зошит                 | 25.50 |
+|  2 | PD1002       | Папка                 | 40.00 |
+|  3 | PD1003       | Набір ручок           | 60.25 |
++----+--------------+-----------------------+-------+
+
+> SELECT COUNT(*) AS total FROM products;
++-------+
+| total |
++-------+
+|     3 |
++-------+
+
+> SELECT product_name, price FROM products WHERE price >= 40.00 ORDER BY price, id;
++-----------------------+-------+
+| product_name          | price |
++-----------------------+-------+
+| Папка                 | 40.00 |
+| Набір ручок           | 60.25 |
++-----------------------+-------+
+
+-- Крок 1.4: права користувача застосунку
+GRANT USAGE ON *.* TO `lab11_app`@`127.0.0.1` IDENTIFIED BY PASSWORD '<прибрано>'
+GRANT SELECT, INSERT, UPDATE, DELETE ON `lab11`.* TO `lab11_app`@`127.0.0.1`
+GRANT SELECT ON `lab11_restore`.* TO `lab11_app`@`127.0.0.1`
