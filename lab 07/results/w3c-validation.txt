@@ -1,0 +1,11 @@
+W3C Nu HTML Checker (https://validator.w3.org/nu/), 29.10.2026: згенерований HTML сторінок у різних станах — кількість повідомлень
+01_index_light.html: 0 
+02_visits_first.html: 0 
+03_visits_second.html: 0 
+04_favorites_empty.html: 0 
+05_preferences.html: 0 
+06_preferences_400.html: 0 
+07_index_dark_flash.html: 0 
+08_favorites_items.html: 0 
+09_favorites_400.html: 0 
+10_index_ended.html: 0 

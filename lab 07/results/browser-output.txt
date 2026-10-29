@@ -1,0 +1,196 @@
+
+== 1. Перший GET без cookies
+   /lab-07/index.php | theme-light | обраних 0 із 4
+   GET /index.php → 200
+      Set-Cookie: LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax
+
+== 1б. Перший перегляд visits.php
+   /lab-07/visits.php | theme-light | обраних — | перегляд №1, попередній: Попередній час недоступний
+   GET /visits.php → 200
+      Cookie: LAB07SESSID=…
+      Set-Cookie: club_visits=1; expires=Thu, 05 Nov 2026 06:51:43 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+      Set-Cookie: club_last_visit=1793256703; expires=Thu, 05 Nov 2026 06:51:43 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+
+== 2. Збереження темної теми: POST → 303 → GET
+   /lab-07/index.php | theme-dark | обраних 0 із 4 | «Тему «Темна» збережено на 30 днів.»
+   GET /preferences.php → 200
+      Cookie: LAB07SESSID=…; club_visits=1; club_last_visit=1793256703
+   POST /preferences.php → 303 Location: index.php
+      тіло: csrf=…&theme=dark&action=save
+      Cookie: LAB07SESSID=…; club_visits=1; club_last_visit=1793256703
+      Set-Cookie: club_theme=dark; expires=Sat, 28 Nov 2026 06:51:44 GMT; Max-Age=2592000; path=/lab-07/; HttpOnly; SameSite=Lax
+   GET /index.php → 200
+      Cookie: LAB07SESSID=…; club_visits=1; club_last_visit=1793256703; club_theme=dark
+
+== 2б. Тема на інших сторінках
+   /lab-07/preferences.php | theme-dark | обраних —
+   GET /preferences.php → 200
+      Cookie: LAB07SESSID=…; club_visits=1; club_last_visit=1793256703; club_theme=dark
+
+== 2в. HttpOnly: cookies у сховищі та document.cookie
+   /lab-07/preferences.php | theme-dark | обраних —
+   documentCookie: 
+   cookieStore: [{"name":"club_last_visit","value":"1793256703","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-05T06:51:43.861Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false},{"name":"LAB07SESSID","value":"…","domain":"127.0.0.1","path":"/lab-07/","expires":"Session","httpOnly":true,"secure":false,"sameSite":"Lax","session":true},{"name":"club_visits","value":"1","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-05T06:51:43.861Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false},{"name":"club_theme","value":"dark","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-28T06:51:44.178Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false}]
+
+== 3. Другий і третій перегляд visits.php
+   /lab-07/visits.php | theme-dark | обраних — | перегляд №3, попередній: 29.10.2026 08:51:45
+   GET /visits.php → 200
+      Cookie: LAB07SESSID=…; club_visits=1; club_last_visit=1793256703; club_theme=dark
+      Set-Cookie: club_visits=2; expires=Thu, 05 Nov 2026 06:51:45 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+      Set-Cookie: club_last_visit=1793256705; expires=Thu, 05 Nov 2026 06:51:45 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+   GET /visits.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=2; club_last_visit=1793256705
+      Set-Cookie: club_visits=3; expires=Thu, 05 Nov 2026 06:51:46 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+      Set-Cookie: club_last_visit=1793256706; expires=Thu, 05 Nov 2026 06:51:46 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+
+== 4. Обране: додати «Кіновечір» і «Автобусна екскурсія»
+   /lab-07/favorites.php | theme-dark | обраних 2 | ««Автобусна екскурсія до Канева» додано до обраного.»
+   обране: Кіновечір «Українське кіно 90-х»; Автобусна екскурсія до Канева
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   POST /favorites.php → 303 Location: favorites.php
+      тіло: csrf=…&id=cinema&action=add
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   POST /favorites.php → 303 Location: favorites.php
+      тіло: csrf=…&id=trip&action=add
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+
+== 4б. Оновлення сторінки після POST (Page.reload)
+   /lab-07/favorites.php | theme-dark | обраних 2
+   обране: Кіновечір «Українське кіно 90-х»; Автобусна екскурсія до Канева
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+
+== 5. Друга вкладка того самого браузера
+   /lab-07/favorites.php | theme-dark | обраних 3 | ««Інтелектуальна вікторина «Що? Де? Коли?»» додано до обраного.»
+   обране: Кіновечір «Українське кіно 90-х»; Автобусна екскурсія до Канева; Інтелектуальна вікторина «Що? Де? Коли?»
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   POST /favorites.php → 303 Location: favorites.php
+      тіло: csrf=…&id=quiz&action=add
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+
+== 5б. Перша вкладка після оновлення
+   /lab-07/index.php | theme-dark | обраних 3 із 4
+   GET /index.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+
+== 6. Окремий приватний контекст
+   /lab-07/favorites.php | theme-light | обраних 0
+   GET /favorites.php → 200
+      Set-Cookie: LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax
+   sessionDiffers: true
+
+== 7. Невідома тема з форми (value змінено на blue)
+   /lab-07/preferences.php | theme-dark | обраних — | помилка «Невідома тема. Виберіть «Світла» або «Темна».»
+   GET /preferences.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   POST /preferences.php → 400
+      тіло: csrf=…&theme=blue&action=save
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   themeCookieAfter: dark
+
+== 7б. Змінений CSRF-токен
+   /lab-07/favorites.php |  | обраних —
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   POST /favorites.php → 403
+      тіло: csrf=…&id=eco&action=add
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+
+== 8. Очистити обране
+   /lab-07/favorites.php | theme-dark | обраних 0 | «Список обраного очищено.»
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   POST /favorites.php → 303 Location: favorites.php
+      тіло: csrf=…&action=clear
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   sessionChanged: false
+
+== 9. Завершити сеанс
+   /lab-07/index.php?ended=1 | theme-dark | обраних 0 із 4 | «Сеанс завершено: список обраного очищено, створено нову сесію. Тема й історія відвідувань збережені.»
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   POST /favorites.php → 303 Location: favorites.php
+      тіло: csrf=…&id=cinema&action=add
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   GET /favorites.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   GET /index.php → 200
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+   POST /end_session.php → 303 Location: index.php?ended=1
+      тіло: csrf=…
+      Cookie: LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706
+      Set-Cookie: LAB07SESSID=deleted; expires=Thu, 01 Jan 1970 00:00:01 GMT; Max-Age=0; path=/lab-07/; HttpOnly; SameSite=Lax
+   GET /index.php?ended=1 → 200
+      Cookie: club_theme=dark; club_visits=3; club_last_visit=1793256706
+      Set-Cookie: LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax
+   sessionChanged: true
+   cookieStore: [{"name":"LAB07SESSID","value":"…","domain":"127.0.0.1","path":"/lab-07/","expires":"Session","httpOnly":true,"secure":false,"sameSite":"Lax","session":true},{"name":"club_last_visit","value":"1793256706","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-05T06:51:46.980Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false},{"name":"club_theme","value":"dark","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-28T06:51:44.178Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false},{"name":"club_visits","value":"3","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-05T06:51:46.980Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false}]
+
+== 10. Перед закриттям браузера: додати «Вікторину»
+   /lab-07/favorites.php | theme-dark | обраних 1 | ««Інтелектуальна вікторина «Що? Де? Коли?»» додано до обраного.»
+   обране: Інтелектуальна вікторина «Що? Де? Коли?»
+   GET /favorites.php → 200
+      Cookie: club_theme=dark; club_visits=3; club_last_visit=1793256706; LAB07SESSID=…
+   POST /favorites.php → 303 Location: favorites.php
+      тіло: csrf=…&id=quiz&action=add
+      Cookie: club_theme=dark; club_visits=3; club_last_visit=1793256706; LAB07SESSID=…
+   GET /favorites.php → 200
+      Cookie: club_theme=dark; club_visits=3; club_last_visit=1793256706; LAB07SESSID=…
+
+== 10б. Після повторного відкриття браузера
+   /lab-07/index.php | theme-dark | обраних 0 із 4
+   GET /index.php → 200
+      Cookie: club_theme=dark; club_visits=3; club_last_visit=1793256706
+      Set-Cookie: LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax
+   cookieStore: [{"name":"club_last_visit","value":"1793256706","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-05T06:51:46.980Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false},{"name":"club_theme","value":"dark","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-28T06:51:44.178Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false},{"name":"club_visits","value":"3","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-05T06:51:46.980Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false},{"name":"LAB07SESSID","value":"…","domain":"127.0.0.1","path":"/lab-07/","expires":"Session","httpOnly":true,"secure":false,"sameSite":"Lax","session":true}]
+
+== 10в. visits.php після повторного відкриття
+   /lab-07/visits.php | theme-dark | обраних — | перегляд №4, попередній: 29.10.2026 08:51:46
+   GET /visits.php → 200
+      Cookie: club_theme=dark; club_visits=3; club_last_visit=1793256706; LAB07SESSID=…
+      Set-Cookie: club_visits=4; expires=Thu, 05 Nov 2026 06:51:52 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+      Set-Cookie: club_last_visit=1793256712; expires=Thu, 05 Nov 2026 06:51:52 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+
+== 11. Скинути налаштування
+   /lab-07/index.php | theme-light | обраних 0 із 4 | «Налаштування скинуто: використовується світла тема.»
+   GET /preferences.php → 200
+      Cookie: club_theme=dark; LAB07SESSID=…; club_visits=4; club_last_visit=1793256712
+   POST /preferences.php → 303 Location: index.php
+      тіло: csrf=…&action=reset
+      Cookie: club_theme=dark; LAB07SESSID=…; club_visits=4; club_last_visit=1793256712
+      Set-Cookie: club_theme=deleted; expires=Thu, 01 Jan 1970 00:00:01 GMT; Max-Age=0; path=/lab-07/; HttpOnly; SameSite=Lax
+   GET /index.php → 200
+      Cookie: LAB07SESSID=…; club_visits=4; club_last_visit=1793256712
+   cookieStore: [{"name":"club_last_visit","value":"1793256712","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-05T06:51:52.261Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false},{"name":"LAB07SESSID","value":"…","domain":"127.0.0.1","path":"/lab-07/","expires":"Session","httpOnly":true,"secure":false,"sameSite":"Lax","session":true},{"name":"club_visits","value":"4","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-05T06:51:52.260Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false}]
+
+== 12. Cookies заблоковані: visits.php двічі
+   /lab-07/visits.php | theme-light | обраних — | перегляд №1, попередній: Попередній час недоступний
+   GET /visits.php → 200
+      Set-Cookie: LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax
+      Set-Cookie: club_visits=1; expires=Thu, 05 Nov 2026 06:51:53 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+      Set-Cookie: club_last_visit=1793256713; expires=Thu, 05 Nov 2026 06:51:53 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+   GET /visits.php → 200
+      Set-Cookie: LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax
+      Set-Cookie: club_visits=1; expires=Thu, 05 Nov 2026 06:51:53 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+      Set-Cookie: club_last_visit=1793256713; expires=Thu, 05 Nov 2026 06:51:53 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+   cookieStore: [{"name":"club_visits","value":"4","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-05T06:51:52.260Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false},{"name":"club_last_visit","value":"1793256712","domain":"127.0.0.1","path":"/lab-07/","expires":"2026-11-05T06:51:52.261Z","httpOnly":true,"secure":false,"sameSite":"Lax","session":false}]
+
+== 12б. Cookies заблоковані: POST «Додати» в обране
+   /lab-07/favorites.php |  | обраних —
+   GET /favorites.php → 200
+      Set-Cookie: LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax
+   POST /favorites.php → 403
+      тіло: csrf=…&id=eco&action=add
+      Set-Cookie: LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax
+
+Браузер: Edg/156.0.4314.42; кроків: 21; журнал: results/browser-log.json

@@ -1,0 +1,138 @@
+Адреса: http://127.0.0.1:8070/lab-07
+PHP вебсервера: PHP/8.2.12
+
+== 1. Перший GET без cookies
+index.php: 200 / тема theme-light, обраних 0
+      Set-Cookie: LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax
+visits.php: 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+      Set-Cookie: club_visits=1; expires=Thu, 05 Nov 2026 06:46:06 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+      Set-Cookie: club_last_visit=1793256366; expires=Thu, 05 Nov 2026 06:46:06 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+favorites.php: 200 / обраних 0: Список обраного порожній
+
+== 2. Збереження темної теми (POST → 303 → GET)
+POST save dark: 303 → index.php
+      Set-Cookie: club_theme=dark; expires=Sat, 28 Nov 2026 06:46:07 GMT; Max-Age=2592000; path=/lab-07/; HttpOnly; SameSite=Lax
+   GET index.php: 200 / тема theme-dark | Тему «Темна» збережено на 30 днів.
+   preferences.php: тема theme-dark
+   visits.php: тема theme-dark
+   favorites.php: тема theme-dark
+   оновлення index.php: тема theme-dark, повідомлення: (одноразове — вже немає)
+   в cookie-сховищі: club_theme=dark, прапорець HttpOnly: 1
+
+== 3. Інший хост: localhost замість 127.0.0.1
+http://localhost:8070/lab-07/index.php: 200 / тема theme-light — cookies 127.0.0.1 не надіслано
+
+== 4. Повторне відкриття браузера (curl -j відкидає сесійні cookies, як закритий браузер)
+visits.php до закриття: №3, попередній: 29.10.2026 08:46:08
+favorites додано quiz перед закриттям: 1 обраних
+після «перезапуску»: index 200 / тема theme-dark, обраних 0
+   visits.php: №4, попередній: 29.10.2026 08:46:10
+   ідентифікатор сесії: змінився (сесійна cookie LAB07SESSID не зберігається після закриття)
+
+== 5. Скидання теми
+POST reset: 303 → index.php
+      Set-Cookie: club_theme=deleted; expires=Thu, 01 Jan 1970 00:00:01 GMT; Max-Age=0; path=/lab-07/; HttpOnly; SameSite=Lax
+   GET index.php: тема theme-light | Налаштування скинуто: використовується світла тема.; club_theme у сховищі: 0
+
+== 6. Другий і третій GET visits.php (нове сховище)
+GET 1: 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+GET 2: 200 / №2, попередній: 29.10.2026 08:46:13
+GET 3: 200 / №3, попередній: 29.10.2026 08:46:14
+      Set-Cookie: club_visits=3; expires=Thu, 05 Nov 2026 06:46:16 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+      Set-Cookie: club_last_visit=1793256376; expires=Thu, 05 Nov 2026 06:46:16 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax
+
+== 7. Межові значення лічильника (cookie задано вручну)
+club_visits=0 → №1, попередній: 29.10.2026 08:45:16 | записано: club_visits=1
+club_visits=999998 → №999999, попередній: 29.10.2026 08:45:17 | записано: club_visits=999999
+club_visits=999999 → №999999, попередній: 29.10.2026 08:45:18 | записано: club_visits=999999
+
+== 8. Некоректний лічильник
+club_visits='-1' → 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+club_visits='1.5' → 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+club_visits='1000000' → 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+club_visits='007' → 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+club_visits='abc' → 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+club_visits='' → 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+club_visits[x]=5 (масив) → 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+
+== 9. Відсутній, майбутній або некоректний попередній час (лічильник 5)
+club_last_visit='' → №6, попередній: Попередній час недоступний
+club_last_visit='1793259982' → №6, попередній: Попередній час недоступний
+club_last_visit='0' → №6, попередній: Попередній час недоступний
+club_last_visit='abc' → №6, попередній: Попередній час недоступний
+club_last_visit='-5' → №6, попередній: Попередній час недоступний
+club_last_visit='1.5' → №6, попередній: Попередній час недоступний
+club_last_visit[x]=1 (масив) → №6, попередній: Попередній час недоступний
+
+== 10. Некоректна тема в cookie
+club_theme='unknown' → 200 / тема theme-light, сирий тег <b> у відповіді: 0
+club_theme='<b>dark</b>' → 200 / тема theme-light, сирий тег <b> у відповіді: 0
+club_theme='%3Cb%3Edark%3C%2Fb%3E' → 200 / тема theme-light, сирий тег <b> у відповіді: 0
+club_theme='DARK' → 200 / тема theme-light, сирий тег <b> у відповіді: 0
+club_theme=' dark' → 200 / тема theme-light, сирий тег <b> у відповіді: 0
+club_theme[test]=dark (масив) → 200 / тема theme-light
+
+== 11. Невідома дія, тема чи захід; масив замість поля POST (стан не змінюється)
+початковий стан: тема theme-dark, обраних 1
+preferences action=delete: 400 Невідома дія.; Set-Cookie club_theme: 0
+preferences без action: 400 Невідома дія.; Set-Cookie club_theme: 0
+preferences theme=blue: 400 Невідома тема. Виберіть «Світла» або «Темна».; Set-Cookie club_theme: 0
+preferences theme=<b>dark</b>: 400 Невідома тема. Виберіть «Світла» або «Темна».; Set-Cookie club_theme: 0
+preferences theme[]=light: 400 Невідома тема. Виберіть «Світла» або «Темна».; Set-Cookie club_theme: 0
+preferences action[]=reset: 400 Невідома дія.; Set-Cookie club_theme: 0
+favorites action=delete: 400 Невідома дія.
+favorites id=party: 400 Невідомий захід.
+favorites id=<script>: 400 Невідомий захід.
+favorites без id: 400 Невідомий захід.
+favorites id[]=quiz: 400 Невідомий захід.
+favorites action[]=clear: 400 Невідома дія.
+стан після відмов: тема theme-dark, обраних 1
+GET end_session.php: 405 Потрібен POST-запит., Allow: POST
+POST visits.php: 405 Сторінка відвідувань приймає лише GET., Allow: GET
+PUT preferences.php: 405 Метод не підтримується.
+
+== 12. CSRF-токен: відсутній, змінений, масивом (HTTP 403, стан не змінюється)
+preferences.php [action=save&theme=light]: без токена 403; змінений 403; масив 403 Недійсний токен форми.
+favorites.php [action=add&id=quiz]: без токена 403; змінений 403; масив 403 Недійсний токен форми.
+favorites.php [action=clear]: без токена 403; змінений 403; масив 403 Недійсний токен форми.
+end_session.php [x=1]: без токена 403; змінений 403; масив 403 Недійсний токен форми.
+стан: тема theme-dark, обраних 1, ідентифікатор сесії не змінився
+
+== 13. Обране: двічі доданий захід, видалення відсутнього, оновлення після POST
+add cinema: 303 → favorites.php
+add cinema ще раз: 303 → favorites.php
+add trip: 303 → favorites.php
+GET favorites.php: обраних 2: Кіновечір «Українське кіно 90-х»;Автобусна екскурсія до Канева | «Автобусна екскурсія до Канева» додано до обраного.
+оновлення (повторний GET після 303): обраних 2 — POST не повторено
+remove eco (не було в списку): 303 → favorites.php; обраних 2
+remove cinema: 303 → favorites.php; обраних 1: Автобусна екскурсія до Канева
+кількість на index.php: 1
+
+== 14. Друга вкладка (той самий cookie-файл) і приватний контекст (окремий)
+add quiz у першій вкладці: 303
+друга вкладка, GET favorites.php: обраних 2: Автобусна екскурсія до Канева;Інтелектуальна вікторина «Що? Де? Коли?»
+приватний контекст: index 200 / тема theme-light, обраних 0; visits: №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+сесії різні: так
+
+== 15. Очищення обраного і завершення сеансу
+clear: 303 → favorites.php; обраних 0; ідентифікатор сесії не змінився; токен не змінився
+знову додано eco: обраних 1
+POST end_session.php: 303 → index.php?ended=1
+      Set-Cookie: LAB07SESSID=deleted; expires=Thu, 01 Jan 1970 00:00:01 GMT; Max-Age=0; path=/lab-07/; HttpOnly; SameSite=Lax
+   LAB07SESSID у сховищі після відповіді: 0
+   GET index.php?ended=1: 200 | Сеанс завершено: список обраного очищено, створено нову сесію. Тема й історія відвідувань збережені.; тема theme-dark, обраних 0
+      Set-Cookie: LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax
+   ідентифікатор сесії після переходу: змінився; CSRF-токен: змінився
+   історія збережена: club_visits=1 → visits.php №2, попередній: 29.10.2026 08:46:45
+   старий токен після завершення: 403 Недійсний токен форми.
+
+== 16. Cookies заблоковані (кожен запит без cookies)
+visits.php запит 1: 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+visits.php запит 2: 200 / №1, попередній: Попередній час недоступний, «Ласкаво просимо!»
+POST save dark з токеном зі сторінки: 403 Недійсний токен форми. — сесію втрачено
+index.php: тема theme-light
+
+== 17. Строк дії: тимчасово короткий інтервал (час завершення club_theme у сховищі змінено на +2 с)
+Max-Age теми: Max-Age=2592000 (30 днів = 2592000); visits: Max-Age=604800 (7 днів = 604800)
+одразу: тема theme-dark
+через 3 с: тема theme-light — прострочену cookie не надіслано

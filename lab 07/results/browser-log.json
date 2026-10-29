@@ -1,0 +1,922 @@
+{
+  "base": "http://127.0.0.1:8070/lab-07",
+  "steps": [
+    {
+      "title": "1. Перший GET без cookies",
+      "state": {
+        "url": "/lab-07/index.php",
+        "theme": "theme-light",
+        "count": "0 із 4",
+        "visit": null,
+        "previous": null,
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nПанель клубу",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/index.php",
+          "status": 200,
+          "cookie": "",
+          "setCookie": [
+            "LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "1б. Перший перегляд visits.php",
+      "state": {
+        "url": "/lab-07/visits.php",
+        "theme": "theme-light",
+        "count": null,
+        "visit": "1",
+        "previous": "Попередній час недоступний",
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nІсторія відв",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/visits.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…",
+          "setCookie": [
+            "club_visits=1; expires=Thu, 05 Nov 2026 06:51:43 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax",
+            "club_last_visit=1793256703; expires=Thu, 05 Nov 2026 06:51:43 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "2. Збереження темної теми: POST → 303 → GET",
+      "state": {
+        "url": "/lab-07/index.php",
+        "theme": "theme-dark",
+        "count": "0 із 4",
+        "visit": null,
+        "previous": null,
+        "flash": "Тему «Темна» збережено на 30 днів.",
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nПанель клубу",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/preferences.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_visits=1; club_last_visit=1793256703",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/preferences.php",
+          "status": 303,
+          "postData": "csrf=…&theme=dark&action=save",
+          "cookie": "LAB07SESSID=…; club_visits=1; club_last_visit=1793256703",
+          "setCookie": [
+            "club_theme=dark; expires=Sat, 28 Nov 2026 06:51:44 GMT; Max-Age=2592000; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ],
+          "location": "index.php"
+        },
+        {
+          "method": "GET",
+          "url": "/index.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_visits=1; club_last_visit=1793256703; club_theme=dark",
+          "setCookie": []
+        }
+      ]
+    },
+    {
+      "title": "2б. Тема на інших сторінках",
+      "state": {
+        "url": "/lab-07/preferences.php",
+        "theme": "theme-dark",
+        "count": null,
+        "visit": null,
+        "previous": null,
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nНалаштування",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/preferences.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_visits=1; club_last_visit=1793256703; club_theme=dark",
+          "setCookie": []
+        }
+      ]
+    },
+    {
+      "title": "2в. HttpOnly: cookies у сховищі та document.cookie",
+      "state": {
+        "url": "/lab-07/preferences.php",
+        "theme": "theme-dark",
+        "count": null,
+        "visit": null,
+        "previous": null,
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nНалаштування",
+        "favorites": []
+      },
+      "network": [],
+      "documentCookie": "",
+      "cookieStore": [
+        {
+          "name": "club_last_visit",
+          "value": "1793256703",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-05T06:51:43.861Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        },
+        {
+          "name": "LAB07SESSID",
+          "value": "…",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "Session",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": true
+        },
+        {
+          "name": "club_visits",
+          "value": "1",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-05T06:51:43.861Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        },
+        {
+          "name": "club_theme",
+          "value": "dark",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-28T06:51:44.178Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        }
+      ]
+    },
+    {
+      "title": "3. Другий і третій перегляд visits.php",
+      "state": {
+        "url": "/lab-07/visits.php",
+        "theme": "theme-dark",
+        "count": null,
+        "visit": "3",
+        "previous": "29.10.2026 08:51:45",
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nІсторія відв",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/visits.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_visits=1; club_last_visit=1793256703; club_theme=dark",
+          "setCookie": [
+            "club_visits=2; expires=Thu, 05 Nov 2026 06:51:45 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax",
+            "club_last_visit=1793256705; expires=Thu, 05 Nov 2026 06:51:45 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        },
+        {
+          "method": "GET",
+          "url": "/visits.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=2; club_last_visit=1793256705",
+          "setCookie": [
+            "club_visits=3; expires=Thu, 05 Nov 2026 06:51:46 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax",
+            "club_last_visit=1793256706; expires=Thu, 05 Nov 2026 06:51:46 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "4. Обране: додати «Кіновечір» і «Автобусна екскурсія»",
+      "state": {
+        "url": "/lab-07/favorites.php",
+        "theme": "theme-dark",
+        "count": "2",
+        "visit": null,
+        "previous": null,
+        "flash": "«Автобусна екскурсія до Канева» додано до обраного.",
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nЗаходи клубу",
+        "favorites": [
+          "Кіновечір «Українське кіно 90-х»",
+          "Автобусна екскурсія до Канева"
+        ]
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/favorites.php",
+          "status": 303,
+          "postData": "csrf=…&id=cinema&action=add",
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": [],
+          "location": "favorites.php"
+        },
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/favorites.php",
+          "status": 303,
+          "postData": "csrf=…&id=trip&action=add",
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": [],
+          "location": "favorites.php"
+        },
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        }
+      ]
+    },
+    {
+      "title": "4б. Оновлення сторінки після POST (Page.reload)",
+      "state": {
+        "url": "/lab-07/favorites.php",
+        "theme": "theme-dark",
+        "count": "2",
+        "visit": null,
+        "previous": null,
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nЗаходи клубу",
+        "favorites": [
+          "Кіновечір «Українське кіно 90-х»",
+          "Автобусна екскурсія до Канева"
+        ]
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        }
+      ]
+    },
+    {
+      "title": "5. Друга вкладка того самого браузера",
+      "state": {
+        "url": "/lab-07/favorites.php",
+        "theme": "theme-dark",
+        "count": "3",
+        "visit": null,
+        "previous": null,
+        "flash": "«Інтелектуальна вікторина «Що? Де? Коли?»» додано до обраного.",
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nЗаходи клубу",
+        "favorites": [
+          "Кіновечір «Українське кіно 90-х»",
+          "Автобусна екскурсія до Канева",
+          "Інтелектуальна вікторина «Що? Де? Коли?»"
+        ]
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/favorites.php",
+          "status": 303,
+          "postData": "csrf=…&id=quiz&action=add",
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": [],
+          "location": "favorites.php"
+        },
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        }
+      ]
+    },
+    {
+      "title": "5б. Перша вкладка після оновлення",
+      "state": {
+        "url": "/lab-07/index.php",
+        "theme": "theme-dark",
+        "count": "3 із 4",
+        "visit": null,
+        "previous": null,
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nПанель клубу",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/index.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        }
+      ]
+    },
+    {
+      "title": "6. Окремий приватний контекст",
+      "state": {
+        "url": "/lab-07/favorites.php",
+        "theme": "theme-light",
+        "count": "0",
+        "visit": null,
+        "previous": null,
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nЗаходи клубу",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "",
+          "setCookie": [
+            "LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        }
+      ],
+      "sessionDiffers": true
+    },
+    {
+      "title": "7. Невідома тема з форми (value змінено на blue)",
+      "state": {
+        "url": "/lab-07/preferences.php",
+        "theme": "theme-dark",
+        "count": null,
+        "visit": null,
+        "previous": null,
+        "flash": null,
+        "error": "Невідома тема. Виберіть «Світла» або «Темна».",
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nНалаштування",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/preferences.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/preferences.php",
+          "status": 400,
+          "postData": "csrf=…&theme=blue&action=save",
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        }
+      ],
+      "themeCookieAfter": "dark"
+    },
+    {
+      "title": "7б. Змінений CSRF-токен",
+      "state": {
+        "url": "/lab-07/favorites.php",
+        "theme": "",
+        "count": null,
+        "visit": null,
+        "previous": null,
+        "flash": null,
+        "error": null,
+        "text": "Недійсний токен форми.",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/favorites.php",
+          "status": 403,
+          "postData": "csrf=…&id=eco&action=add",
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        }
+      ]
+    },
+    {
+      "title": "8. Очистити обране",
+      "state": {
+        "url": "/lab-07/favorites.php",
+        "theme": "theme-dark",
+        "count": "0",
+        "visit": null,
+        "previous": null,
+        "flash": "Список обраного очищено.",
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nЗаходи клубу",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/favorites.php",
+          "status": 303,
+          "postData": "csrf=…&action=clear",
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": [],
+          "location": "favorites.php"
+        },
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        }
+      ],
+      "sessionChanged": false
+    },
+    {
+      "title": "9. Завершити сеанс",
+      "state": {
+        "url": "/lab-07/index.php?ended=1",
+        "theme": "theme-dark",
+        "count": "0 із 4",
+        "visit": null,
+        "previous": null,
+        "flash": "Сеанс завершено: список обраного очищено, створено нову сесію. Тема й історія відвідувань збережені.",
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nПанель клубу",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/favorites.php",
+          "status": 303,
+          "postData": "csrf=…&id=cinema&action=add",
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": [],
+          "location": "favorites.php"
+        },
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        },
+        {
+          "method": "GET",
+          "url": "/index.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/end_session.php",
+          "status": 303,
+          "postData": "csrf=…",
+          "cookie": "LAB07SESSID=…; club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": [
+            "LAB07SESSID=deleted; expires=Thu, 01 Jan 1970 00:00:01 GMT; Max-Age=0; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ],
+          "location": "index.php?ended=1"
+        },
+        {
+          "method": "GET",
+          "url": "/index.php?ended=1",
+          "status": 200,
+          "cookie": "club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": [
+            "LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        }
+      ],
+      "sessionChanged": true,
+      "cookieStore": [
+        {
+          "name": "LAB07SESSID",
+          "value": "…",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "Session",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": true
+        },
+        {
+          "name": "club_last_visit",
+          "value": "1793256706",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-05T06:51:46.980Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        },
+        {
+          "name": "club_theme",
+          "value": "dark",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-28T06:51:44.178Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        },
+        {
+          "name": "club_visits",
+          "value": "3",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-05T06:51:46.980Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        }
+      ]
+    },
+    {
+      "title": "10. Перед закриттям браузера: додати «Вікторину»",
+      "state": {
+        "url": "/lab-07/favorites.php",
+        "theme": "theme-dark",
+        "count": "1",
+        "visit": null,
+        "previous": null,
+        "flash": "«Інтелектуальна вікторина «Що? Де? Коли?»» додано до обраного.",
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nЗаходи клубу",
+        "favorites": [
+          "Інтелектуальна вікторина «Що? Де? Коли?»"
+        ]
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "club_theme=dark; club_visits=3; club_last_visit=1793256706; LAB07SESSID=…",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/favorites.php",
+          "status": 303,
+          "postData": "csrf=…&id=quiz&action=add",
+          "cookie": "club_theme=dark; club_visits=3; club_last_visit=1793256706; LAB07SESSID=…",
+          "setCookie": [],
+          "location": "favorites.php"
+        },
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "club_theme=dark; club_visits=3; club_last_visit=1793256706; LAB07SESSID=…",
+          "setCookie": []
+        }
+      ]
+    },
+    {
+      "title": "10б. Після повторного відкриття браузера",
+      "state": {
+        "url": "/lab-07/index.php",
+        "theme": "theme-dark",
+        "count": "0 із 4",
+        "visit": null,
+        "previous": null,
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nПанель клубу",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/index.php",
+          "status": 200,
+          "cookie": "club_theme=dark; club_visits=3; club_last_visit=1793256706",
+          "setCookie": [
+            "LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        }
+      ],
+      "cookieStore": [
+        {
+          "name": "club_last_visit",
+          "value": "1793256706",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-05T06:51:46.980Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        },
+        {
+          "name": "club_theme",
+          "value": "dark",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-28T06:51:44.178Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        },
+        {
+          "name": "club_visits",
+          "value": "3",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-05T06:51:46.980Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        },
+        {
+          "name": "LAB07SESSID",
+          "value": "…",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "Session",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": true
+        }
+      ]
+    },
+    {
+      "title": "10в. visits.php після повторного відкриття",
+      "state": {
+        "url": "/lab-07/visits.php",
+        "theme": "theme-dark",
+        "count": null,
+        "visit": "4",
+        "previous": "29.10.2026 08:51:46",
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nІсторія відв",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/visits.php",
+          "status": 200,
+          "cookie": "club_theme=dark; club_visits=3; club_last_visit=1793256706; LAB07SESSID=…",
+          "setCookie": [
+            "club_visits=4; expires=Thu, 05 Nov 2026 06:51:52 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax",
+            "club_last_visit=1793256712; expires=Thu, 05 Nov 2026 06:51:52 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "11. Скинути налаштування",
+      "state": {
+        "url": "/lab-07/index.php",
+        "theme": "theme-light",
+        "count": "0 із 4",
+        "visit": null,
+        "previous": null,
+        "flash": "Налаштування скинуто: використовується світла тема.",
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nПанель клубу",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/preferences.php",
+          "status": 200,
+          "cookie": "club_theme=dark; LAB07SESSID=…; club_visits=4; club_last_visit=1793256712",
+          "setCookie": []
+        },
+        {
+          "method": "POST",
+          "url": "/preferences.php",
+          "status": 303,
+          "postData": "csrf=…&action=reset",
+          "cookie": "club_theme=dark; LAB07SESSID=…; club_visits=4; club_last_visit=1793256712",
+          "setCookie": [
+            "club_theme=deleted; expires=Thu, 01 Jan 1970 00:00:01 GMT; Max-Age=0; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ],
+          "location": "index.php"
+        },
+        {
+          "method": "GET",
+          "url": "/index.php",
+          "status": 200,
+          "cookie": "LAB07SESSID=…; club_visits=4; club_last_visit=1793256712",
+          "setCookie": []
+        }
+      ],
+      "cookieStore": [
+        {
+          "name": "club_last_visit",
+          "value": "1793256712",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-05T06:51:52.261Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        },
+        {
+          "name": "LAB07SESSID",
+          "value": "…",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "Session",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": true
+        },
+        {
+          "name": "club_visits",
+          "value": "4",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-05T06:51:52.260Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        }
+      ]
+    },
+    {
+      "title": "12. Cookies заблоковані: visits.php двічі",
+      "state": {
+        "url": "/lab-07/visits.php",
+        "theme": "theme-light",
+        "count": null,
+        "visit": "1",
+        "previous": "Попередній час недоступний",
+        "flash": null,
+        "error": null,
+        "text": "Студентський клуб «Політ»\n\nГоловна\nНалаштування\nВідвідування\nОбране\nІсторія відв",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/visits.php",
+          "status": 200,
+          "cookie": "",
+          "setCookie": [
+            "LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax",
+            "club_visits=1; expires=Thu, 05 Nov 2026 06:51:53 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax",
+            "club_last_visit=1793256713; expires=Thu, 05 Nov 2026 06:51:53 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        },
+        {
+          "method": "GET",
+          "url": "/visits.php",
+          "status": 200,
+          "cookie": "",
+          "setCookie": [
+            "LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax",
+            "club_visits=1; expires=Thu, 05 Nov 2026 06:51:53 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax",
+            "club_last_visit=1793256713; expires=Thu, 05 Nov 2026 06:51:53 GMT; Max-Age=604800; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        }
+      ],
+      "cookieStore": [
+        {
+          "name": "club_visits",
+          "value": "4",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-05T06:51:52.260Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        },
+        {
+          "name": "club_last_visit",
+          "value": "1793256712",
+          "domain": "127.0.0.1",
+          "path": "/lab-07/",
+          "expires": "2026-11-05T06:51:52.261Z",
+          "httpOnly": true,
+          "secure": false,
+          "sameSite": "Lax",
+          "session": false
+        }
+      ]
+    },
+    {
+      "title": "12б. Cookies заблоковані: POST «Додати» в обране",
+      "state": {
+        "url": "/lab-07/favorites.php",
+        "theme": "",
+        "count": null,
+        "visit": null,
+        "previous": null,
+        "flash": null,
+        "error": null,
+        "text": "Недійсний токен форми.",
+        "favorites": []
+      },
+      "network": [
+        {
+          "method": "GET",
+          "url": "/favorites.php",
+          "status": 200,
+          "cookie": "",
+          "setCookie": [
+            "LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        },
+        {
+          "method": "POST",
+          "url": "/favorites.php",
+          "status": 403,
+          "postData": "csrf=…&id=eco&action=add",
+          "cookie": "",
+          "setCookie": [
+            "LAB07SESSID=…; path=/lab-07/; HttpOnly; SameSite=Lax"
+          ]
+        }
+      ]
+    }
+  ],
+  "browser": "Edg/156.0.4314.42"
+}

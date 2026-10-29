@@ -1,0 +1,26 @@
+== GET cookie_set.php
+HTTP/1.1 200 OK
+Set-Cookie: username=Student; expires=Thu, 29 Oct 2026 07:45:54 GMT; Max-Age=3600; path=/
+Set-Cookie: age=20; expires=Thu, 29 Oct 2026 07:45:54 GMT; Max-Age=3600; path=/
+    <p>Cookie встановлені!</p>
+== GET cookie_get.php
+HTTP/1.1 200 OK
+    <p>Ім'я: Student</p>
+    <p>Вік: 20</p>
+== GET cookie_delete.php
+HTTP/1.1 200 OK
+Set-Cookie: username=deleted; expires=Thu, 01 Jan 1970 00:00:01 GMT; Max-Age=0; path=/
+Set-Cookie: age=deleted; expires=Thu, 01 Jan 1970 00:00:01 GMT; Max-Age=0; path=/
+    <p>Cookie видалені!</p>
+== GET session_simple.php
+HTTP/1.1 200 OK
+Set-Cookie: PHPSESSID=…; path=/
+    <p>Сесія відкрита. Ім'я користувача: Student</p>
+== GET session_counter.php
+HTTP/1.1 200 OK
+    <p>Ви відвідали цю сторінку 1 раз(ів).</p>
+== GET session_counter.php
+HTTP/1.1 200 OK
+    <p>Ви відвідали цю сторінку 2 раз(ів).</p>
+== GET cookie_get.php з Cookie: username[x]=1 (масив)
+TypeError: htmlspecialchars(): Argument #1 ($string) must be of type string, array given in given/src/cookie_get.php:7
