@@ -1,0 +1,7 @@
+W3C Nu HTML Checker (https://validator.w3.org/nu/), 29.10.2026: кількість повідомлень
+index.html: 0 
+bus.svg: 1 info: Using the preset for SVG + URL + HTML + MathML based on the root namespace.
+bus-400.svg: 1 info: Using the preset for SVG + URL + HTML + MathML based on the root namespace.
+diagram.svg: 1 info: Using the preset for SVG + URL + HTML + MathML based on the root namespace.
+markup.svg: 1 info: Using the preset for SVG + URL + HTML + MathML based on the root namespace.
+diagram_1.svg: 1 info: Using the preset for SVG + URL + HTML + MathML based on the root namespace.

@@ -1,0 +1,155 @@
+== 1. Середовище
+PHP CLI: 8.2.12; php.ini: \xampp\php\php.ini
+GD у CLI без параметрів: ні (рядок у php.ini: 931:;extension=gd)
+GD у CLI з -d extension=gd: bundled (2.1.0 compatible); PNG так; FreeType так
+phpinfo() вебсервера: Loaded Configuration File: C:\xampp\php\php.ini 
+   GD Support: enabled ;GD Version: bundled (2.1.0 compatible) ;FreeType Support: enabled ;PNG Support: enabled 
+   діагностичну сторінку видалено: так
+шрифт: C:/Windows/Fonts/DejaVuSans.ttf
+
+== 2. Кругова діаграма
+diagram_png_1.php: 200 image/png, PNG, 640 x 400, 3626 байт
+   частки за кольором пікселів на колі: помаранчевий 30%, синій 39%, зелений 30%
+pie_png.php?values=50,25,15,10: 200 image/png, PNG, 640 x 400, 13904 байт
+pie_png.php?values=1,1: 200 image/png, PNG, 640 x 400, 9415 байт
+pie_png.php?values=0,0,5: 200 image/png, PNG, 640 x 400, 11353 байт
+pie_png.php?values=0,0: 400 text/plain; charset=UTF-8: values: сума має бути додатною (інакше ділення на нуль).
+pie_png.php?values=5: 400 text/plain; charset=UTF-8: values: від 2 до 6 цілих невід’ємних чисел через кому.
+pie_png.php?values=1,2,3,4,5,6,7: 400 text/plain; charset=UTF-8: values: від 2 до 6 цілих невід’ємних чисел через кому.
+pie_png.php?values=1001,1: 400 text/plain; charset=UTF-8: values: кожне значення 0–1000.
+pie_png.php?values=a,b: 400 text/plain; charset=UTF-8: values: від 2 до 6 цілих невід’ємних чисел через кому.
+pie_png.php?values=-1,2: 400 text/plain; charset=UTF-8: values: від 2 до 6 цілих невід’ємних чисел через кому.
+pie_png.php?values=1.5,2: 400 text/plain; charset=UTF-8: values: від 2 до 6 цілих невід’ємних чисел через кому.
+pie_png.php?values[]=1: 400 text/plain; charset=UTF-8: values: від 2 до 6 цілих невід’ємних чисел через кому.
+
+== 3. Розміри полотна (готові й власні діаграми)
+diagram_png_2.php: 200 image/png, PNG, 640 x 400, 2611 байт
+diagram_png_2.php?width=400&height=300: 200 image/png, PNG, 400 x 300, 1925 байт
+diagram_png_2.php?width=640&height=400: 200 image/png, PNG, 640 x 400, 2611 байт
+diagram_png_2.php?width=800&height=500: 200 image/png, PNG, 800 x 500, 3334 байт
+diagram_png_2.php?width=1200&height=800: 200 image/png, PNG, 1200 x 800, 5604 байт
+diagram_svg.php: 200 image/svg+xml; charset=UTF-8, SVG width="640" height="400", 1161 байт
+diagram_svg.php?width=400&height=300: 200 image/svg+xml; charset=UTF-8, SVG width="400" height="300", 1160 байт
+diagram_svg.php?width=640&height=400: 200 image/svg+xml; charset=UTF-8, SVG width="640" height="400", 1161 байт
+diagram_svg.php?width=800&height=500: 200 image/svg+xml; charset=UTF-8, SVG width="800" height="500", 1167 байт
+diagram_svg.php?width=1200&height=800: 200 image/svg+xml; charset=UTF-8, SVG width="1200" height="800", 1170 байт
+bus_png.php: 200 image/png, PNG, 640 x 400, 16901 байт
+bus_png.php?width=400&height=300: 200 image/png, PNG, 400 x 300, 13994 байт
+bus_png.php?width=640&height=400: 200 image/png, PNG, 640 x 400, 16901 байт
+bus_png.php?width=800&height=500: 200 image/png, PNG, 800 x 500, 19803 байт
+bus_png.php?width=1200&height=800: 200 image/png, PNG, 1200 x 800, 21625 байт
+bus_svg.php: 200 image/svg+xml; charset=UTF-8, SVG width="640" height="400", 3808 байт
+bus_svg.php?width=400&height=300: 200 image/svg+xml; charset=UTF-8, SVG width="400" height="300", 3768 байт
+bus_svg.php?width=640&height=400: 200 image/svg+xml; charset=UTF-8, SVG width="640" height="400", 3808 байт
+bus_svg.php?width=800&height=500: 200 image/svg+xml; charset=UTF-8, SVG width="800" height="500", 3809 байт
+bus_svg.php?width=1200&height=800: 200 image/svg+xml; charset=UTF-8, SVG width="1200" height="800", 3747 байт
+
+== 4. Неприпустимі параметри розміру (HTTP 400)
+bus_png.php?width=399: 400 text/plain; charset=UTF-8: Параметр width має бути в межах 400–1200. | diagram_svg.php: 400
+bus_png.php?width=1201: 400 text/plain; charset=UTF-8: Параметр width має бути в межах 400–1200. | diagram_svg.php: 400
+bus_png.php?height=299: 400 text/plain; charset=UTF-8: Параметр height має бути в межах 300–800. | diagram_svg.php: 400
+bus_png.php?height=801: 400 text/plain; charset=UTF-8: Параметр height має бути в межах 300–800. | diagram_svg.php: 400
+bus_png.php?width[]=640: 400 text/plain; charset=UTF-8: Параметр width має бути цілим числом. | diagram_svg.php: 400
+bus_png.php?width=400.5: 400 text/plain; charset=UTF-8: Параметр width має бути цілим числом. | diagram_svg.php: 400
+bus_png.php?width=abc: 400 text/plain; charset=UTF-8: Параметр width має бути цілим числом. | diagram_svg.php: 400
+bus_png.php?width=: 400 text/plain; charset=UTF-8: Параметр width має бути цілим числом. | diagram_svg.php: 400
+bus_png.php?height=-300: 400 text/plain; charset=UTF-8: Параметр height має бути цілим числом. | diagram_svg.php: 400
+bus_png.php?width=0640: 400 text/plain; charset=UTF-8: Параметр width має бути в межах 400–1200. | diagram_svg.php: 400
+bus_png.php?width=640%20: 400 text/plain; charset=UTF-8: Параметр width має бути цілим числом. | diagram_svg.php: 400
+
+== 5. Масштаб: висоти стовпців у SVG (D = 80 найвищий, C = 30 → 3/8 висоти D)
+   diagram_svg: висоти [75, 188, 113, 300, 150]; C/D = 113/300 = 0.3767 (3/8 = 0.375)
+   bus_svg: висоти [252, 210, 168, 126, 84, 24, 54]; відношення до найвищого: 1.000≈1.000, 0.833≈0.833, 0.667≈0.667, 0.500≈0.500, 0.333≈0.333, 0.095≈0.095, 0.214≈0.214
+   bus_png (PNG, пікселі кольору стовпця): висоти [252, 210, 168, 126, 84, 24, 54] — збігаються з SVG
+
+== 6. Дані з файла: копія src на тестовому сервері
+bus-one.json → bus_png: 200 image/png, PNG, 640 x 400, 13125 байт | bus_svg: 200 стовпців 1 | index.php: 200 
+bus-zeros.json → bus_png: 200 image/png, PNG, 640 x 400, 13382 байт | bus_svg: 200 стовпців 3 | index.php: 200 
+bus-empty.json → bus_png: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | bus_svg: 500  | index.php: 200 Дані bus-data.json недоступні або некоректні; причину записано в журнал PHP.
+bus-broken.json → bus_png: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | bus_svg: 500  | index.php: 200 Дані bus-data.json недоступні або некоректні; причину записано в журнал PHP.
+bus-negative.json → bus_png: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | bus_svg: 500  | index.php: 200 Дані bus-data.json недоступні або некоректні; причину записано в журнал PHP.
+bus-string.json → bus_png: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | bus_svg: 500  | index.php: 200 Дані bus-data.json недоступні або некоректні; причину записано в журнал PHP.
+bus-float.json → bus_png: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | bus_svg: 500  | index.php: 200 Дані bus-data.json недоступні або некоректні; причину записано в журнал PHP.
+bus-eleven.json → bus_png: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | bus_svg: 500  | index.php: 200 Дані bus-data.json недоступні або некоректні; причину записано в журнал PHP.
+bus-longlabel.json → bus_png: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | bus_svg: 500  | index.php: 200 Дані bus-data.json недоступні або некоректні; причину записано в журнал PHP.
+bus-list.json → bus_png: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | bus_svg: 500  | index.php: 200 Дані bus-data.json недоступні або некоректні; причину записано в журнал PHP.
+bus-markup.json → bus_png: 200 image/png, PNG, 640 x 400, 17503 байт | bus_svg: 200 стовпців 4 | index.php: 200 
+   XML-розбір SVG із мітками &, <, лапками й <script>: успішно; корінь svg:svg
+   елементів script: 0 | атрибутів on*: 0
+   підписи стовпців (title): Сміла & Черкаси: 30; <script>x()</script>: 20; Ціни < 100 грн: 10; Кам'янець "Old": 5
+   сирий фрагмент: <title>&lt;script&gt;x()&lt;/script&gt;: 20</title>
+chart-one.json → diagram_png_2: 200 image/png, PNG, 640 x 400, 2185 байт | diagram_svg: 200
+chart-zeros.json → diagram_png_2: 200 image/png, PNG, 640 x 400, 2215 байт | diagram_svg: 200
+chart-empty.json → diagram_png_2: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | diagram_svg: 500
+chart-broken.json → diagram_png_2: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | diagram_svg: 500
+chart-negative.json → diagram_png_2: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | diagram_svg: 500
+chart-string.json → diagram_png_2: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP. | diagram_svg: 500
+справжні дані не змінено: bus-data.json так, chart-data.json так
+журнал PHP тестового сервера (причини 500):
+   items має бути списком з 1–10 категорій.
+   Категорія №1: потрібні label (1–24 символи) і ціле value 0–1000000.
+   Категорія №2: потрібні label (1–24 символи) і ціле value 0–1000000.
+   Очікується об’єкт з полями title, unit, items.
+   Очікується список із 1–10 категорій.
+   Пошкоджений JSON: Syntax error
+
+== 7. Водяний знак: вибір файла
+watermark_bus.php?image=sample: 200 image/png, PNG, 640 x 360, 9267 байт
+watermark_bus.php?image=bus: 200 image/png, PNG, 800 x 450, 18600 байт
+watermark_bus.php?image=../../README.md: 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark_bus.php?image=..%2F..%2FREADME.md: 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark_bus.php?image[]=sample: 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark_bus.php?image=BUS: 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark_bus.php?image=http://example.com/a.png: 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark_bus.php?image=C:/Windows/win.ini: 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark_bus.php?image=bus&download=2: 400 text/plain; charset=UTF-8: Параметр download має бути в межах 0–1.
+watermark_bus.php?image=bus&download[]=1: 400 text/plain; charset=UTF-8: Параметр download має бути цілим числом.
+watermark.php?image=../../README.md (готовий): 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark.php?image[]=sample (готовий): 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark.php?image=bus (готовий): 400 text/plain; charset=UTF-8: Невідоме зображення.
+
+== 8. Водяний знак: непридатні файли (підставляються замість bus.png у копії)
+jpeg-renamed.png (4372 байт): 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+text-renamed.png (47 байт): 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+truncated.png (904 байт): 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+corrupted.png (1507 байт): 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+small-300x150.png (523 байт): 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+wide-2001x300.png (2551 байт): 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+pixels-1500x1500.png (10002 байт): 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+heavy-noise.png (5890980 байт): 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+full.png (1507 байт): 200 image/png, PNG, 640 x 360, 8124 байт
+журнал PHP тестового сервера (причини):
+   imagecreatefrompng(): gd-png:  fatal libpng error: ID[BE]T: invalid chunk type
+   imagecreatefrompng(): gd-png:  fatal libpng error: Read Error: truncated data
+   Неприпустимі габарити 1500×1500: від 400×200 до 2000×2000, не більше 2 млн пікселів.
+   Неприпустимі габарити 2001×300: від 400×200 до 2000×2000, не більше 2 млн пікселів.
+   Неприпустимі габарити 300×150: від 400×200 до 2000×2000, не більше 2 млн пікселів.
+   Файл зображення більший за 2 MiB.
+   Файл не є PNG (розширення не гарантує формату).
+
+== 9. Шрифт відсутній (сервер 8092, LAB09_FONT=відсутній файл)
+bus_png.php: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+watermark_bus.php: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+bus_svg.php (GD і шрифт не потрібні): 200 image/svg+xml; charset=UTF-8, SVG width="640" height="400", 3808 байт
+watermark.php (готовий): 200 image/png, PNG, 640 x 360, 7704 байт — у Windows підставляє arial.ttf
+журнал: Не знайдено TrueType-шрифт або FreeType: задайте LAB09_FONT чи покладіть src/fonts/DejaVuSans.ttf.
+
+== 10. Завантаження (download=1)
+watermark.php?image=sample&download=1: Content-Type image/png; Content-Disposition: attachment; filename="watermark.png"; PNG, 640 x 360
+watermark_bus.php?image=bus&download=1: Content-Type image/png; Content-Disposition: attachment; filename="watermark.png"; PNG, 800 x 450
+без download: Content-Disposition: — (показ у браузері)
+
+== 11. Збереження на сервері з термінала (CLI)
+php watermark.php без GD: Для цього прикладу потрібне розширення GD із підтримкою PNG. Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
+ → код 1
+php -d extension=gd watermark.php: Збережено watermark-output.png
+php -d extension=gd watermark_bus.php bus: Збережено watermark-bus-output.png (bus, 18600 байт)
+php -d extension=gd watermark_bus.php ../secret: Невідоме зображення. Дозволено: sample, bus → код 1
+src/watermark-output.png: PNG image data, 640 x 360, декодується GD: так
+src/watermark-bus-output.png: PNG image data, 800 x 450, декодується GD: так
+sample.png не змінено: так; bus.png не змінено: так
+GET не записує файлів: так
+prepare_sample.php через HTTP: 405 text/html; charset=UTF-8: Запустіть php prepare_sample.php у терміналі.; make_bus_image.php через HTTP: 405
+
+== 12. HTML-сторінка index.php
+index.php: 200 text/html; charset=UTF-8; зображень 8, з непорожнім alt: 8
