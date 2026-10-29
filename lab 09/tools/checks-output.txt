@@ -107,8 +107,8 @@ watermark_bus.php?image=bus&download[]=1: 400 text/plain; charset=UTF-8: Пар�
 watermark.php?image=../../README.md (готовий + ключ bus): 400 text/plain; charset=UTF-8: Невідоме зображення.
 watermark.php?image[]=sample (готовий + ключ bus): 400 text/plain; charset=UTF-8: Невідоме зображення.
 watermark.php?image=unknown (готовий + ключ bus): 400 text/plain; charset=UTF-8: Невідоме зображення.
-watermark.php?image=sample (готовий + ключ bus): 200 image/png, PNG, 640 x 360, 7704 байт
-watermark.php?image=bus (готовий + ключ bus): 200 image/png, PNG, 800 x 450, 14502 байт
+watermark.php?image=sample (готовий + ключ bus): 200 image/png, PNG, 640 x 360, 8957 байт
+watermark.php?image=bus (готовий + ключ bus): 200 image/png, PNG, 800 x 450, 15612 байт
 
 == 8. Водяний знак: непридатні файли (підставляються замість bus.png у копії)
 jpeg-renamed.png (4372 байт): 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
@@ -133,7 +133,7 @@ full.png (1507 байт): 200 image/png, PNG, 640 x 360, 8124 байт
 bus_png.php: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
 watermark_bus.php: 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
 bus_svg.php (GD і шрифт не потрібні): 200 image/svg+xml; charset=UTF-8, SVG width="640" height="400", 3808 байт
-watermark.php (готовий): 200 image/png, PNG, 640 x 360, 7704 байт — у Windows підставляє arial.ttf
+watermark.php (готовий): 200 image/png, PNG, 640 x 360, 8957 байт — у Windows підставляє arial.ttf
 журнал: Не знайдено TrueType-шрифт або FreeType: задайте LAB09_FONT чи покладіть src/fonts/DejaVuSans.ttf.
 
 == 10. Завантаження (download=1)

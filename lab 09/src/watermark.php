@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__ . '/common.php';
+require_once __DIR__ . '/config.php';   // Власна зміна (крок 5.4): група й вигадане ім’я для підпису.
 
 runImage(function (): void {
     requireGd();
@@ -41,12 +42,18 @@ runImage(function (): void {
         $font = 'C:/Windows/Fonts/arial.ttf';
     }
     if (is_readable($font) && function_exists('imagettftext')) {
-        $label = 'ЛР 9 | Група DEMO | ' . date('d.m.Y');
-        if (imagettftext($image, 14, 0, 15, $height - 20, $white, $font, $label) === false) {
+        // Власна зміна (крок 5.4): група, вигадане ім’я та дата замість «Група DEMO».
+        // Кегль 14…9 за imagettfbbox(): підпис уміщується в ширину з полями по 15 px.
+        $label = 'ЛР 9 | ' . CAPTION_GROUP . ' | ' . CAPTION_AUTHOR . ' | ' . date('d.m.Y');
+        $size = 14;
+        while ($size > 9 && ($box = imagettfbbox($size, 0, $font, $label)) !== false && $box[2] - $box[0] > $width - 30) {
+            $size--;
+        }
+        if (imagettftext($image, $size, 0, 15, $height - 20, $white, $font, $label) === false) {
             throw new RuntimeException('Не вдалося додати текст.');
         }
     } else {
-        imagestring($image, 4, 15, $height - 35, 'Lab 09 | Group DEMO | ' . date('Y-m-d'), $white);
+        imagestring($image, 4, 15, $height - 35, 'Lab 09 | Group 451 | Taras Marshrutenko | ' . date('Y-m-d'), $white);
     }
     if (PHP_SAPI === 'cli') {
         // Серверне збереження лише за явного запуску з термінала.

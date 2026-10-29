@@ -8,7 +8,7 @@
 | --- | --- |
 | `index.php` | HTML-сторінка: готові PNG і SVG з таблицею даних, власні діаграми з таблицею, водяні знаки, кругова діаграма |
 | `src/common.php`, `diagram_png_1.php`, `diagram_png_2.php`, `diagram_svg.php`, `diagram_1.svg`, `chart-data.json`, `prepare_sample.php`, `images/sample.png` | Готові приклади з методички, **без змін** |
-| `src/watermark.php` | Готовий приклад; власна зміна — ключ `bus` у списку дозволених файлів (`watermark.php?image=bus`) |
+| `src/watermark.php` | Готовий приклад із двома власними змінами: ключ `bus` у списку дозволених файлів (`watermark.php?image=bus`) і підпис «ЛР 9 \| 451 група \| Тарас Маршрутенко \| дата» замість «Група DEMO» |
 | `src/bus-data.json` | Власні дані: відправлення з автовокзалу за 7 напрямками (рейсів на тиждень) |
 | `src/config.php`, `src/bus-common.php` | Шрифт і шляхи; перевірка JSON, спільна розкладка PNG/SVG, підбір кегля й перенесення підписів |
 | `src/bus_png.php`, `src/bus_svg.php` | Самостійні завдання 1–2: та сама стовпчаста діаграма у PNG (GD, TrueType) і SVG |
