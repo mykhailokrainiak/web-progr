@@ -1,0 +1,20 @@
+body { font-family: Arial, sans-serif; margin: 0; color: #1f2937; line-height: 1.45; }
+nav { background: #1e3a8a; padding: 0.6rem 1.25rem; display: flex; gap: 1.2rem; }
+nav a { color: #e0e7ff; }
+nav a[aria-current="page"] { color: #fff; font-weight: bold; text-decoration: none; }
+main { padding: 0.5rem 1.25rem 1.5rem; max-width: 42rem; }
+form p { margin: 0 0 0.8rem; }
+label { display: block; font-weight: bold; }
+input, textarea { padding: 5px; width: 100%; max-width: 26rem; box-sizing: border-box; font: inherit; }
+textarea { min-height: 7rem; }
+input[type="file"] { padding: 0; }
+button { padding: 5px 14px; cursor: pointer; font: inherit; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible { outline: 3px solid #f59e0b; outline-offset: 1px; }
+.hint, .note { display: block; font-size: 0.85rem; color: #4b5563; }
+.errors { border-left: 4px solid #b91c1c; background: #fef2f2; padding: 0.4rem 0.6rem; }
+.errors ul { margin: 0; padding-left: 1.2rem; }
+.field-error { display: block; color: #b91c1c; font-size: 0.9rem; }
+.success { border-left: 4px solid #15803d; background: #f0fdf4; padding: 0.4rem 0.6rem; }
+.summary { border-collapse: collapse; margin: 0.6rem 0; }
+.summary th, .summary td { border: 1px solid #9ca3af; padding: 0.3rem 0.6rem; text-align: left; vertical-align: top; }
+.summary td.message { white-space: pre-wrap; }

@@ -1,0 +1,15 @@
+W3C Nu HTML Checker (https://validator.w3.org/nu/), 29.10.2026: згенерований HTML — кількість повідомлень
+01_login_get.html: 0 
+02_login_fail.html: 0 
+03_login_format.html: 0 
+04_login_ok.html: 0 
+05_feedback_get.html: 0 
+06_feedback_errors.html: 0 
+07_feedback_ok_file.html: 0 
+08_feedback_ok_nofile.html: 0 
+09_stage2_form.html: 0 
+10_stage2_get.html: 0 
+11_stage2_ok.html: 0 
+12_query.html: 0 
+13_stage2_error.html: 0 
+Перша перевірка 02/03 до виправлення: 1 error — Bad value “alert” for attribute “role” on element “ul” (розмітка з заготовки index001.php); виправлено обгорткою div role=alert.
