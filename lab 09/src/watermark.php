@@ -5,7 +5,10 @@ require __DIR__ . '/common.php';
 runImage(function (): void {
     requireGd();
     // Клієнт обирає лише ключ; довільні шляхи й URL не приймаємо.
-    $allowed = ['sample' => __DIR__ . '/images/sample.png'];
+    $allowed = [
+        'sample' => __DIR__ . '/images/sample.png',
+        'bus' => __DIR__ . '/images/bus.png',   // Власна зміна (крок 5.2): власне навчальне PNG.
+    ];
     $key = $_GET['image'] ?? 'sample';
     if (!is_string($key) || !isset($allowed[$key])) {
         throw new InvalidArgumentException('Невідоме зображення.');

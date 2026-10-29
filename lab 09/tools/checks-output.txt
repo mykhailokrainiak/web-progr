@@ -104,9 +104,11 @@ watermark_bus.php?image=http://example.com/a.png: 400 text/plain; charset=UTF-8:
 watermark_bus.php?image=C:/Windows/win.ini: 400 text/plain; charset=UTF-8: Невідоме зображення.
 watermark_bus.php?image=bus&download=2: 400 text/plain; charset=UTF-8: Параметр download має бути в межах 0–1.
 watermark_bus.php?image=bus&download[]=1: 400 text/plain; charset=UTF-8: Параметр download має бути цілим числом.
-watermark.php?image=../../README.md (готовий): 400 text/plain; charset=UTF-8: Невідоме зображення.
-watermark.php?image[]=sample (готовий): 400 text/plain; charset=UTF-8: Невідоме зображення.
-watermark.php?image=bus (готовий): 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark.php?image=../../README.md (готовий + ключ bus): 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark.php?image[]=sample (готовий + ключ bus): 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark.php?image=unknown (готовий + ключ bus): 400 text/plain; charset=UTF-8: Невідоме зображення.
+watermark.php?image=sample (готовий + ключ bus): 200 image/png, PNG, 640 x 360, 7704 байт
+watermark.php?image=bus (готовий + ключ bus): 200 image/png, PNG, 800 x 450, 14502 байт
 
 == 8. Водяний знак: непридатні файли (підставляються замість bus.png у копії)
 jpeg-renamed.png (4372 байт): 500 text/plain; charset=UTF-8: Не вдалося сформувати зображення. Перевірте GD, дані, файли та журнал PHP.
@@ -136,6 +138,7 @@ watermark.php (готовий): 200 image/png, PNG, 640 x 360, 7704 байт —
 
 == 10. Завантаження (download=1)
 watermark.php?image=sample&download=1: Content-Type image/png; Content-Disposition: attachment; filename="watermark.png"; PNG, 640 x 360
+watermark.php?image=bus&download=1: Content-Type image/png; Content-Disposition: attachment; filename="watermark.png"; PNG, 800 x 450
 watermark_bus.php?image=bus&download=1: Content-Type image/png; Content-Disposition: attachment; filename="watermark.png"; PNG, 800 x 450
 без download: Content-Disposition: — (показ у браузері)
 

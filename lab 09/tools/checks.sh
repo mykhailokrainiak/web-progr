@@ -128,7 +128,7 @@ grep -a -o 'PHP Message: .*\|Пошкоджений JSON[^"]*\|items має бу
 echo; echo "== 7. Водяний знак: вибір файла"
 for q in image=sample image=bus 'image=../../README.md' 'image=..%2F..%2FREADME.md' 'image[]=sample' image=BUS 'image=http://example.com/a.png' 'image=C:/Windows/win.ini' 'image=bus&download=2' 'image=bus&download[]=1'; do
     echo "watermark_bus.php?$q: $(show "$B/watermark_bus.php?$q")"; done
-for q in 'image=../../README.md' 'image[]=sample' 'image=bus'; do echo "watermark.php?$q (готовий): $(show "$B/watermark.php?$q")"; done
+for q in 'image=../../README.md' 'image[]=sample' 'image=unknown' 'image=sample' 'image=bus'; do echo "watermark.php?$q (готовий + ключ bus): $(show "$B/watermark.php?$q")"; done
 
 echo; echo "== 8. Водяний знак: непридатні файли (підставляються замість bus.png у копії)"
 for f in jpeg-renamed text-renamed truncated corrupted small-300x150 wide-2001x300 pixels-1500x1500 heavy-noise full; do
@@ -147,7 +147,7 @@ echo "watermark.php (готовий): $(show "$NF/watermark.php?image=sample") �
 echo "журнал: $(grep -a -o 'Не знайдено TrueType-шрифт[^"]*' tests/work/server-8092.log | head -1)"
 
 echo; echo "== 10. Завантаження (download=1)"
-for p in "watermark.php?image=sample&download=1" "watermark_bus.php?image=bus&download=1"; do
+for p in "watermark.php?image=sample&download=1" "watermark.php?image=bus&download=1" "watermark_bus.php?image=bus&download=1"; do
     get "$B/$p" >/dev/null; echo "$p: Content-Type $(ctype); Content-Disposition: $(hdr content-disposition); $(kind)"; done
 get "$B/watermark_bus.php?image=bus" >/dev/null; echo "без download: Content-Disposition: $(hdr content-disposition || true)— (показ у браузері)"
 
