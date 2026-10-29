@@ -1,0 +1,22 @@
+body { font-family: Arial, sans-serif; margin: 0; color: #1f2937; line-height: 1.45; }
+nav { background: #134e4a; padding: 0.5rem 1rem; }
+nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; }
+nav a { color: #ccfbf1; font-size: 0.9rem; }
+nav a[aria-current="page"] { color: #fff; font-weight: bold; text-decoration: none; }
+main { padding: 0.3rem 1.2rem 1rem; }
+h1 { font-size: 1.5rem; } h2 { font-size: 1.15rem; margin-top: 1.4rem; }
+.numbers { font-family: Consolas, monospace; word-break: break-word; max-width: 60rem; }
+pre { background: #f3f4f6; border: 1px solid #d1d5db; padding: 0.5rem; max-height: 22rem; overflow: auto; font-size: 0.85rem; }
+table { border-collapse: collapse; margin: 0.5rem 0; }
+th, td { border: 1px solid #9ca3af; padding: 0.25rem 0.55rem; text-align: left; }
+th { background: #e5e7eb; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.matrix td { text-align: right; min-width: 2.2rem; font-variant-numeric: tabular-nums; }
+table.matrix caption, table caption { font-weight: bold; text-align: left; padding-bottom: 0.2rem; }
+.matrices { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+.error { color: #b91c1c; font-weight: bold; }
+.note { color: #4b5563; font-size: 0.9rem; }
+.time { margin-top: 1.5rem; color: #4b5563; font-size: 0.9rem; }
+form.filter { display: flex; gap: 0.8rem; align-items: flex-end; flex-wrap: wrap; margin: 0.5rem 0; }
+form.filter label { display: block; font-size: 0.9rem; }
+form.filter input { width: 7rem; padding: 3px; }
